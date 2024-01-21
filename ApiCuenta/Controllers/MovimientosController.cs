@@ -64,39 +64,49 @@ namespace ApiCuenta.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CrearMovimiento([FromBody] MovimientoDto MovimientoDto)
+        public IActionResult CrearMovimiento([FromBody] CrearMovimientoDto CrearMovimientoDto)
         {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            if (MovimientoDto == null)
+            if (CrearMovimientoDto == null)
             {
                 return BadRequest(ModelState);
             }
 
-            var Movimiento = _mapper.Map<Movimiento>(MovimientoDto);
+            var Movimiento = _mapper.Map<Movimiento>(CrearMovimientoDto);
 
-            var Cuenta = MovimientoDto.Numero;
+            var Cuenta = CrearMovimientoDto.Numero;
             Cuenta cuenta = _cuRepo.GetCuenta(Cuenta);
             Movimiento.Saldo = cuenta.Saldo;
 
-            if (!_mvRepo.CrearMovimiento(Movimiento))
-            {
-                ModelState.AddModelError("", $"Algo salió mal guardando el registro {Movimiento.IdMovimiento}");
-                return StatusCode(500, ModelState);
-            }
-
             cuenta.Saldo = cuenta.Saldo + Movimiento.Valor;
 
-            if (!_cuRepo.ActualizarCuenta(cuenta))
+            if (cuenta.Saldo <= 0)
             {
-                ModelState.AddModelError("", $"Algo salió mal actualizando el saldo de la cuenta {Movimiento.Numero}");
+                ModelState.AddModelError("", $"Saldo no disponible");
                 return StatusCode(500, ModelState);
+            }
+            else
+            {
+
+                if (!_mvRepo.CrearMovimiento(Movimiento))
+                {
+                    ModelState.AddModelError("", $"Algo salió mal guardando el registro {Movimiento.IdMovimiento}");
+                    return StatusCode(500, ModelState);
+                }
+
+                if (!_cuRepo.ActualizarCuenta(cuenta))
+                {
+                    ModelState.AddModelError("", $"Algo salió mal actualizando el saldo de la cuenta {Movimiento.Numero}");
+                    return StatusCode(500, ModelState);
+                }
             }
 
             return CreatedAtRoute("GetMovimiento", new { IdMovimiento = Movimiento.IdMovimiento }, Movimiento);
+            
         }
 
         [HttpPatch("{IdMovimiento:int}", Name = "ActualizarPatchMovimiento")]
@@ -119,7 +129,7 @@ namespace ApiCuenta.Controllers
 
             if (!_mvRepo.ActualizarMovimiento(Movimiento))
             {
-                ModelState.AddModelError("", $"Algo salió mal actualizando el registro{Movimiento.IdMovimiento}");
+                ModelState.AddModelError("", $"Algo salió mal actualizando el registro {Movimiento.IdMovimiento}");
                 return StatusCode(500, ModelState);
             }
             return NoContent();
