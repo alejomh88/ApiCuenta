@@ -7,12 +7,13 @@ namespace ApiCuenta.Modelos.Dto
     {
         public int IdMovimiento { get; set; }
 
-        [Required]
-        public DateTime Fecha { get; set; }
 
+        //public DateTime Fecha { get; set; }
+
+        [Required]
         public string TipoMovimiento { get; set; }
 
-        public float Saldo { get; set; }
+        //public float Saldo { get; set; }
 
         public float Valor { get; set; }
 

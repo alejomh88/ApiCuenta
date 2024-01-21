@@ -66,26 +66,21 @@ namespace ApiCuenta.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CrearMovimiento([FromBody] CrearMovimientoDto crearMovimientoDto)
+        public IActionResult CrearMovimiento([FromBody] MovimientoDto MovimientoDto)
         {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            if (crearMovimientoDto == null)
+            if (MovimientoDto == null)
             {
                 return BadRequest(ModelState);
             }
-            if (_mvRepo.ExisteMovimiento(crearMovimientoDto.Fecha))
-            {
-                ModelState.AddModelError("", "El Movimiento ya existe");
-                return StatusCode(404, ModelState);
-            }
 
-            var Movimiento = _mapper.Map<Movimiento>(crearMovimientoDto);
+            var Movimiento = _mapper.Map<Movimiento>(MovimientoDto);
 
-            var Cuenta = crearMovimientoDto.Numero;
+            var Cuenta = MovimientoDto.Numero;
             Cuenta cuenta = _cuRepo.GetCuenta(Cuenta);
             Movimiento.Saldo = cuenta.Saldo;
 

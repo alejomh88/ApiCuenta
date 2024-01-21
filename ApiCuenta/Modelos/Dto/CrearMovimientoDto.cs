@@ -7,7 +7,7 @@ namespace ApiCuenta.Modelos.Dto
     {
 
         [Required]
-        public DateTime Fecha { get; set; }
+        //public DateTime Fecha { get; set; }
 
         public string TipoMovimiento { get; set; }
 
