@@ -14,5 +14,7 @@ namespace ApiCuenta.Data
         public DbSet<Cuenta> Cuenta { get; set; }
         public DbSet<Movimiento> Movimimento { get; set; }
 
+        public DbSet<Reporte> Reporte { get; set; }
+
     }
 }

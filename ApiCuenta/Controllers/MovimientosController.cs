@@ -16,14 +16,12 @@ namespace ApiCuenta.Controllers
         private readonly IMovimientoRepositorio _mvRepo;
         private readonly ICuentaRepositorio _cuRepo;
         private readonly IMapper _mapper;
-        private readonly HttpClient _httpClient;
 
-        public MovimientosController(IMovimientoRepositorio mvRepo, ICuentaRepositorio cuRepo, IMapper mapper, HttpClient httpClient)
+        public MovimientosController(IMovimientoRepositorio mvRepo, ICuentaRepositorio cuRepo, IMapper mapper)
         {
             _mvRepo = mvRepo;
             _cuRepo = cuRepo;
             _mapper = mapper;
-            _httpClient = httpClient;
         }
 
 
@@ -112,7 +110,7 @@ namespace ApiCuenta.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (MovimientoDto == null || IdMovimiento != MovimientoDto.IdMovimiento)
+            if (MovimientoDto == null)
             {
                 return BadRequest(ModelState);
             }
