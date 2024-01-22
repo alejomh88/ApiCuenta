@@ -8,6 +8,8 @@ namespace ApiCuenta.Modelos
     public class Reporte
     {
         [Key]
+        public int IdMovimiento { get; set; }
+
         public DateTime Fecha { get; set; }
 
         public string Nombre { get; set; }
@@ -18,7 +20,7 @@ namespace ApiCuenta.Modelos
 
         public float Saldoinicial { get; set; }
 
-        public string Estado { get; set; }
+        public string EstadoCuenta { get; set; }
 
         public string TipoMovimiento { get; set; }
 
