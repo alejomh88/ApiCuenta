@@ -101,13 +101,13 @@ namespace ApiCuenta.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ActualizarPatchCuenta(string Numero, [FromBody] CuentaDto CuentaDto)
+        public async Task<IActionResult> ActualizarPatchCuenta(string Numero, [FromBody] ActualizarCuentaDto CuentaDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            if (CuentaDto == null || Numero != CuentaDto.Numero)
+            if (CuentaDto == null)
             {
                 return BadRequest(ModelState);
             }
@@ -122,6 +122,7 @@ namespace ApiCuenta.Controllers
             else
             {
                 var Cuenta = _mapper.Map<Cuenta>(CuentaDto);
+                Cuenta.Numero = Numero;
 
                 if (!_cuRepo.ActualizarCuenta(Cuenta))
                 {

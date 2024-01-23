@@ -84,7 +84,7 @@ namespace ApiCuenta.Controllers
 
             cuenta.Saldo = cuenta.Saldo + Movimiento.Valor;
 
-            if (cuenta.Saldo <= 0)
+            if (cuenta.Saldo < 0)
             {
                 ModelState.AddModelError("", $"Saldo no disponible");
                 return StatusCode(500, ModelState);
@@ -109,31 +109,32 @@ namespace ApiCuenta.Controllers
             
         }
 
-        [HttpPatch("{IdMovimiento:int}", Name = "ActualizarPatchMovimiento")]
-        [ProducesResponseType(201, Type = typeof(MovimientoDto))]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult ActualizarPatchMovimiento(int IdMovimiento, [FromBody] MovimientoDto MovimientoDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            if (MovimientoDto == null)
-            {
-                return BadRequest(ModelState);
-            }
+        //[HttpPatch("{IdMovimiento:int}", Name = "ActualizarPatchMovimiento")]
+        //[ProducesResponseType(201, Type = typeof(CrearMovimientoDto))]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public IActionResult ActualizarPatchMovimiento(int IdMovimiento, [FromBody] CrearMovimientoDto CrearMovimientoDto)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+        //    if (CrearMovimientoDto == null)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            var Movimiento = _mapper.Map<Movimiento>(MovimientoDto);
+        //    var Movimiento = _mapper.Map<Movimiento>(CrearMovimientoDto);
+        //    Movimiento.IdMovimiento = IdMovimiento;
 
-            if (!_mvRepo.ActualizarMovimiento(Movimiento))
-            {
-                ModelState.AddModelError("", $"Algo salió mal actualizando el registro {Movimiento.IdMovimiento}");
-                return StatusCode(500, ModelState);
-            }
-            return NoContent();
-        }
+        //    if (!_mvRepo.ActualizarMovimiento(Movimiento))
+        //    {
+        //        ModelState.AddModelError("", $"Algo salió mal actualizando el registro {Movimiento.IdMovimiento}");
+        //        return StatusCode(500, ModelState);
+        //    }
+        //    return NoContent();
+        //}
 
         [HttpDelete("{IdMovimiento:int}", Name = "BorrarMovimiento")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
